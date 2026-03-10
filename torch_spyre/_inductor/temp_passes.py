@@ -77,10 +77,14 @@ def replace_scalar_with_tensor(graph: torch.fx.Graph) -> None:
                     if scalar_val in const_node_map:
                         full_node = const_node_map[scalar_val]
                     else:
-                        # Currently the dtype of the scalar tensor is set as torch.float16
+                        # Currently the dtype of the scalar tensor is set as same as the output dtype.
                         # TODO: Set the scalar tensor type same as scalar type after to_dtype supported
                         # (open issue: https://github.com/torch-spyre/torch-spyre/issues/41)
+                        dtype = torch.float16
+                        meta = node.meta.get("tensor_meta", None)
+                        if meta:
+                            dtype = meta.dtype
                         full_node = graph.call_function(torch.ops.spyre.full.default,
-                                                        args = ((1,), scalar_val, torch.device("spyre"), torch.float16))
+                                                        args = ((1,), scalar_val, torch.device("spyre"), dtype))
                         const_node_map[scalar_val] = full_node
                     node.update_arg(idx, full_node)
