@@ -56,7 +56,7 @@ def replace_scalar_with_tensor(graph: torch.fx.Graph) -> None:
 
     # Created node cache for scalar values, and reuse the node when
     # the scalar found again.
-    const_node_map = {}
+    const_node_map: dict[int | float, torch.fx.node.Node] = {}
 
     for node in graph.nodes:
         if node.target not in ops_support_list:
@@ -84,7 +84,9 @@ def replace_scalar_with_tensor(graph: torch.fx.Graph) -> None:
                         meta = node.meta.get("tensor_meta", None)
                         if meta:
                             dtype = meta.dtype
-                        full_node = graph.call_function(torch.ops.spyre.full.default,
-                                                        args = ((1,), scalar_val, torch.device("spyre"), dtype))
+                        full_node = graph.call_function(
+                            torch.ops.spyre.full.default,
+                            args=((1,), scalar_val, torch.device("spyre"), dtype),
+                        )
                         const_node_map[scalar_val] = full_node
                     node.update_arg(idx, full_node)

@@ -74,7 +74,8 @@ class CustomPostPasses(CustomGraphPass):
     """
     passes: List[Callable[[torch.fx.graph.Graph], None]] = [
         relayout_linear_weights,
-        replace_scalar_with_tensor]
+        replace_scalar_with_tensor,
+    ]
 
     def __call__(self, graph: torch.fx.graph.Graph) -> None:
         for p in CustomPostPasses.passes:
