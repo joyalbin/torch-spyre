@@ -18,6 +18,7 @@ from typing import Any, Sequence
 
 from sympy import Symbol, Expr
 from torch_spyre._C import DataFormats
+import torch
 
 
 @dataclasses.dataclass
@@ -66,3 +67,7 @@ class OpSpec:
 @dataclasses.dataclass
 class UnimplementedOp:
     op: str
+
+
+def spyre_constant_tensor(const_val=5.0, dtype=torch.float16):
+    return torch.ops.spyre.full((1,), const_val, torch.device("spyre"), dtype=dtype)
