@@ -69,5 +69,5 @@ class UnimplementedOp:
     op: str
 
 
-def spyre_constant_tensor(const_val=5.0, dtype=torch.float16):
-    return torch.ops.spyre.full((1,), const_val, torch.device("spyre"), dtype=dtype)
+def spyre_constant_tensor(const_val, device, dtype=torch.float16):
+    return torch.tensor([const_val], dtype=dtype).to(device)

@@ -92,7 +92,10 @@ class SpyrePythonWrapperCodegen(PythonWrapperCodegen):
     def generate_const_tensor_fallback(self, node):
         value = node.constant_args[0]
         dtype = node.layout.dtype
-        self.writeline(f"{node.get_name()} = spyre_constant_tensor({value}, {dtype})")
+        device = node.layout.device
+        self.writeline(
+            f'{node.get_name()} = spyre_constant_tensor({value}, torch.device("{device}"), {dtype})'
+        )
 
     def make_buffer_reuse(self, old: BufferLike, new: BufferLike, delete_old: bool):
         assert old.get_dtype() == new.get_dtype()
