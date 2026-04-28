@@ -123,16 +123,7 @@ class SpyreConstantFallback(ir.ExternKernel):
         self, op_overload: torch._ops.OpOverload, value, dtype, device
     ) -> None:
         cpp_kernel_name = "aoti_torch_constant"
-        stl = SpyreTensorLayout((), dtype)
-
-        layout = FixedTiledLayout(
-            device,
-            dtype,
-            [1],
-            [1],
-            stl,
-        )
-
+        layout = FixedLayout(device, dtype, [1], [1])
         super().__init__(
             None,
             layout,
