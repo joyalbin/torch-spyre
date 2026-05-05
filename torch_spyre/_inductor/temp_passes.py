@@ -22,9 +22,11 @@ from torch._inductor.pattern_matcher import (
     PatternMatcherPass,
     register_graph_pattern,
 )
+from .logging_utils import get_inductor_logger
 
 aten = torch.ops.aten
 
+logger = get_inductor_logger("core_division")
 
 _RESHAPE_OPS = (
     aten.view.default,
@@ -267,7 +269,7 @@ def convert_constant_with_graph_node(graph: torch.fx.Graph) -> None:
                 if isinstance(in_arg, (int, float)):
                     scalar_indexes.append(i)
                 else:
-                    print(f"Warning: unhandled node type {type(in_arg)}")
+                    logger.warning(f"Warning: unhandled node type {type(in_arg)}")
 
         if len(scalar_indexes) > 0:
             for idx in scalar_indexes:
