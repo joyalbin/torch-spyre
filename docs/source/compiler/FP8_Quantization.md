@@ -1,4 +1,5 @@
 # FP8 Quantization
+Authors: Albin Joy (owner), Rishi Raj Gupta, Akash Nayak
 
 This page describes how torch-spyre support FP8 (8-bit floating point) quantization operations includes FP8 matrix multiplication through PyTorch's `torch._scaled_mm`. FP8 reduces memory usage by 50% compared to FP16 while maintaining acceptable accuracy through quantization and scaling.
 
